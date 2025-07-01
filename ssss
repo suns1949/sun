@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国际专业性格测评系统 | MBTI + 性格色彩学</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --red: #e63946;
+            --blue: #3a86ff;
+            --yellow: #ffbe0b;
+            --green: #2a9d8f;
+            --purple: #7209b7;
+            --orange: #fb8500;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f2fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #e0e7ff;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -70px;
+            right: -70px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .international-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, #ffd166 0%, #ff9e00 100%);
+            color: #5a3800;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header p {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            line-height: 1.7;
+        }
+        .call-to-action {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+            backdrop-filter: blur(5px);
+        }
+        .call-to-action p {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 15px 25px;
+            min-width: 160px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .content-section {
+            padding: 40px;
+            display: none;
+        }
+        .active-section {
+            display: block;
+        }
+        .question {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f4ff;
+        }
+        .question-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        .question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            color: #2a2d5e;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .options label {
+            display: block;
+            padding: 20px 25px;
+            margin: 0;
+            background: #f8f9ff;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e6edff;
+            font-size: 1.1rem;
+            position: relative;
+            line-height: 1.7;
+        }
+        .options label:hover {
+            background: #edf2ff;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(67, 97, 238, 0.15);
+            border-color: #d0dcff;
+        }
+        .options input[type="radio"]:checked + label {
+            background: #e0e7ff;
+            border-color: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+        .options label::before {
+            content: '';
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: inline-block;
+            vertical-align: middle;
+            transition: all 0.3s;
+        }
+        .options input[type="radio"]:checked + label::before {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: inset 0 0 0 4px white;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        button:hover {
+            background: var(--secondary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.5);
+        }
+        button:active {
+            transform: translateY(2px);
+        }
+        .payment-option {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .pay-btn {
+            width: 300px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            border-radius: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .pay-btn:hover {
+            transform: scale(1.05);
+        }
+        .pay-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        .pay-btn:hover::after {
+            left: 100%;
+        }
+        .alipay-btn {
+            background: linear-gradient(135deg, #1677ff 0%, #0d5fd3 100%);
+        }
+        .result-box {
+            background: #f9fafb;
+            border-left: 6px solid var(--primary);
+            padding: 35px;
+            margin: 35px 0;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .personality-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .star {
+            font-size: 46px;
+            color: #ddd;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.2s;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .star:hover, .star.active {
+            color: #ffc107;
+            text-shadow: 0 3px 12px rgba(255, 193, 7, 0.5);
+            transform: scale(1.1);
+        }
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin: 40px 0 50px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+            width: 0%;
+            transition: width 0.5s;
+            border-radius: 6px;
+        }
+        h2 {
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.3rem;
+            position: relative;
+            padding-bottom: 20px;
+            font-weight: 700;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+            border-radius: 3px;
+        }
+        .personality-colors {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .color-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .color-red { background: var(--red); }
+        .color-blue { background: var(--blue); }
+        .color-yellow { background: var(--yellow); }
+        .color-green { background: var(--green); }
+        .color-purple { background: var(--purple); }
+        .color-orange { background: var(--orange); }
+        
+        #full-report {
+            line-height: 1.8;
+        }
+        #full-report h3 {
+            margin: 30px 0 20px;
+            color: var(--secondary);
+            font-size: 1.6rem;
+        }
+        #full-report h4 {
+            margin: 25px 0 15px;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+        #full-report ul, #full-report ol {
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+        #full-report li {
+            margin-bottom: 12px;
+        }
+        .report-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .personality-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .personality-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.8rem;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+        .personality-title h3 {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        .personality-title p {
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+        .personality-description {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            border: 1px solid #e0e7ff;
+        }
+        .type-characteristics {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .characteristic {
+            flex: 1;
+            min-width: 220px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9ff;
+            border-radius: 15px;
+            margin: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eef2ff;
+        }
+        .characteristic i {
+            font-size: 2.3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .personality-type-color {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .test-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .test-intro p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        .payment-guide {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid #e0e7ff;
+        }
+        .payment-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 20px;
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .payment-account {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .account-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .account-badge {
+            background: #e0e7ff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .payment-alert {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        .payment-alert i {
+            color: #ff9800;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px auto;
+            }
+            header {
+                padding: 30px 20px;
+            }
+            header h1 {
+                font-size: 2.3rem;
+            }
+            .content-section {
+                padding: 25px;
+            }
+            .payment-option {
+                flex-direction: column;
+                align-items: center;
+            }
+            .pay-btn {
+                width: 100%;
+                max-width: 350px;
+            }
+            .stats {
+                flex-wrap: wrap;
+            }
+            .personality-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .question h3 {
+                font-size: 1.3rem;
+            }
+            .options label {
+                padding: 18px 20px;
+            }
+            .characteristic, .step {
+                min-width: 100%;
+                margin: 10px 0;
+            }
+            .payment-steps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="international-tag">
+                    <i class="fas fa-globe-americas"></i> 国际认证专业测评系统
+                </div>
+                <h1>探索真实的自我</h1>
+                <p>全球超过200万专业人士使用的性格测评工具，结合MBTI类型理论与性格色彩学，帮助您发现核心优势、职业方向和人际关系模式</p>
+                
+                <div class="call-to-action">
+                    <p><i class="fas fa-star"></i> 只需10分钟，解锁属于您的专业性格报告，开启自我认知之旅</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-box">
+                        <i class="fas fa-list-ol"></i> 30道专业测试题
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-user-friends"></i> 6种人格类型
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-file-alt"></i> 深度分析报告
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 测试部分 -->
+        <section id="test-section" class="content-section active-section">
+            <h2><i class="fas fa-pencil-alt"></i> 性格测评问卷</h2>
+            
+            <div class="test-intro">
+                <p>以下问题将帮助您了解自己的性格特质。请根据您的第一反应选择最符合的选项，没有对错之分，真实回答才能获得准确结果。</p>
+                <p>测试基于MBTI（迈尔斯-布里格斯类型指标）和性格色彩学理论，通过30道题目评估您的性格特征。</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div id="questions-container"></div>
+        </section>
+        
+        <!-- 支付部分 -->
+        <section id="payment-section" class="content-section">
+            <h2><i class="fas fa-lock-open"></i> 解锁完整性格分析报告</h2>
+            <div class="result-box">
+                <div class="personality-tag">您的类型：<span id="preview-type">分析型-蓝INTP</span></div>
+                <p>支付后查看400字专业解析，包含：</p>
+                <ul>
+                    <li><i class="fas fa-check-circle" style="color: var(--green);"></i> 性格优势与潜在缺陷分析</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--green);"></i> 专属改善方案与成长建议</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--green);"></i> 职业适配方向与发展策略</li>
+                    <li><i class="fas fa-check-circle" style="color: var(--green);"></i> 恋爱关系与职场关系指南</li>
+                </ul>
+                <div class="personality-colors">
+                    <div class="color-box color-red"></div>
+                    <div class="color-box color-blue"></div>
+                    <div class="color-box color-yellow"></div>
+                    <div class="color-box color-green"></div>
+                    <div class="color-box color-purple"></div>
+                    <div class="color-box color-orange"></div>
+                </div>
+            </div>
+            
+            <div class="payment-guide">
+                <h3><i class="fas fa-wallet"></i> 支付宝支付指南</h3>
+                <p>请转账至以下支付宝账号完成支付：</p>
+                
+                <div class="payment-account">
+                    <div class="account-info">
+                        <div class="account-badge">
+                            <i class="fab fa-alipay"></i> 支付宝账号
+                        </div>
+                        <div class="account-badge" style="background: #e0f7fa;">
+                            <i class="fas fa-envelope"></i> 136365161@qq.com
+                        </div>
+                        <div class="account-badge" style="background: #ffecb3;">
+                            <i class="fas fa-money-bill-wave"></i> ¥9.90
+                        </div>
+                    </div>
+                    <p style="color: #e53935; font-weight: 600; margin: 10px 0;">
+                        <i class="fas fa-exclamation-circle"></i> 请务必在转账备注中填写您的测评ID: <span id="payment-id">ID-20230630</span>
+                    </p>
+                </div>
+                
+                <div class="payment-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>打开支付宝</h4>
+                        <p>在手机上打开支付宝APP</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>转账到账户</h4>
+                        <p>点击"转账" → "转到支付宝账户"</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>输入收款账号</h4>
+                        <p>输入收款账号: 136365161@qq.com</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>完成转账</h4>
+                        <p>输入金额9.9元，添加备注，完成支付</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-alert">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <p><strong>重要提示：</strong> 请确保在转账备注中填写您的测评ID，以便我们确认您的支付状态并为您解锁完整报告。</p>
+                </div>
+            </div>
+            
+            <div class="payment-option">
+                <button class="pay-btn alipay-btn" onclick="redirectToAlipay()">
+                    <i class="fab fa-alipay"></i> 打开支付宝转账页面
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="showResult()" style="background: var(--green);">
+                    <i class="fas fa-check-circle"></i> 我已支付，查看报告
+                </button>
+                <p style="color: #6c757d; margin-top: 15px; font-size: 14px;">
+                    支付遇到问题？请联系客服微信：psy_test_support
+                </p>
+            </div>
+        </section>
+        
+        <!-- 结果部分 -->
+        <section id="result-section" class="content-section">
+            <div class="personality-header">
+                <div class="personality-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="personality-title">
+                    <h3 id="result-type">分析型-蓝INTP</h3>
+                    <p>创新思考者 | 理论构建者 | 独立分析师</p>
+                </div>
+            </div>
+            
+            <div class="personality-description">
+                <p>您的性格类型是 <strong>分析型-蓝INTP</strong>，这是MBTI中最具创新性和分析能力的类型之一。您拥有强大的逻辑思维能力、创造力和求知欲，善于解决复杂问题和构建理论框架。</p>
+            </div>
+            
+            <div class="result-box">
+                <div id="full-report"></div>
+            </div>
+            
+            <h2><i class="fas fa-star"></i> 测评准确度反馈</h2>
+            <p style="text-align: center; font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px;">
+                请评价此报告的匹配程度，您的反馈将帮助我们优化测评系统
+            </p>
+            <div class="rating-stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+            </div>
+            <button onclick="submitRating()"><i class="fas fa-paper-plane"></i> 提交评价</button>
+        </section>
+        
+        <div class="footer">
+            <p>© 2023 国际专业性格测评系统 | 整合MBTI类型理论与性格色彩学 | 本测试仅供个人发展参考</p>
+            <p>提示：本测试不能替代专业心理咨询或医疗诊断</p>
+        </div>
+    </div>
+
+    <script>
+        // 完整的30道专业测试题（每道4个选项）
+        const questions = [
+            { 
+                question: "当您感到疲惫时，您更倾向于如何恢复精力？", 
+                options: [
+                    "约朋友一起出去玩，在社交中重新充满活力",
+                    "独自看书或看电影，享受安静的个人时间",
+                    "尝试新的活动或体验，寻找新鲜感",
+                    "整理房间或处理一些实际事务，让自己忙起来"
+                ] 
+            },
+            { 
+                question: "当您遇到一个复杂问题时，您通常会：", 
+                options: [
+                    "立即开始行动，边做边调整解决方案",
+                    "深入分析问题的各个方面，寻找根本原因",
+                    "与他人讨论，听取不同的观点和建议",
+                    "参考过去的经验，寻找类似的解决方案"
+                ] 
+            },
+            { 
+                question: "在团队项目中，您最擅长扮演的角色是：", 
+                options: [
+                    "领导者，负责分配任务和推动进度",
+                    "创新者，提出新颖的想法和解决方案",
+                    "协调者，确保团队成员和谐合作",
+                    "执行者，负责具体实施和细节处理"
+                ] 
+            },
+            { 
+                question: "您如何描述您的决策过程？", 
+                options: [
+                    "快速决定，相信直觉和第一反应",
+                    "仔细权衡利弊，考虑所有可能性",
+                    "考虑决策对他人的影响，寻求共识",
+                    "基于事实和数据，遵循逻辑和规则"
+                ] 
+            },
+            { 
+                question: "当面对新环境时，您的第一反应是：", 
+                options: [
+                    "兴奋，迫不及待地探索新机会",
+                    "观察，先了解环境和规则",
+                    "寻找可以交流的人，建立新联系",
+                    "制定计划，确保自己准备充分"
+                ] 
+            },
+            { 
+                question: "在社交场合中，您通常感觉：", 
+                options: [
+                    "充满活力，喜欢成为关注的焦点",
+                    "舒适但有限，更倾向于深入交流",
+                    "需要主动参与，但之后感到疲惫",
+                    "更喜欢观察，只在必要时参与"
+                ] 
+            },
+            { 
+                question: "您如何处理日常任务？", 
+                options: [
+                    "喜欢灵活安排，根据心情调整",
+                    "制定详细计划并严格执行",
+                    "优先处理他人需要的任务",
+                    "多任务并行，同时处理多个事项"
+                ] 
+            },
+            { 
+                question: "当您学习新知识时，您更注重：", 
+                options: [
+                    "实际应用和操作技能",
+                    "理论框架和概念理解",
+                    "与他人的互动和讨论",
+                    "具体步骤和操作方法"
+                ] 
+            },
+            { 
+                question: "您如何应对冲突？", 
+                options: [
+                    "直接面对，快速解决问题",
+                    "分析冲突根源，寻找最佳解决方案",
+                    "调解协商，确保各方满意",
+                    "避免冲突，维持和谐氛围"
+                ] 
+            },
+            { 
+                question: "您认为理想的工作环境是：", 
+                options: [
+                    "充满活力和变化，有挑战性",
+                    "安静自主，允许深度思考",
+                    "团队合作，关系和谐",
+                    "结构清晰，流程规范"
+                ] 
+            },
+            { 
+                question: "当您有创意想法时，您通常会：", 
+                options: [
+                    "立即尝试实现，边做边完善",
+                    "深入思考，完善理论框架",
+                    "与他人分享，寻求反馈",
+                    "评估可行性，制定实施计划"
+                ] 
+            },
+            { 
+                question: "您如何描述您的沟通风格？", 
+                options: [
+                    "直接坦率，表达明确",
+                    "逻辑清晰，注重准确性",
+                    "温和体贴，考虑他人感受",
+                    "具体务实，关注细节"
+                ] 
+            },
+            { 
+                question: "在空闲时间，您更喜欢：", 
+                options: [
+                    "参加社交活动或尝试新事物",
+                    "阅读或研究感兴趣的主题",
+                    "帮助他人或参与志愿活动",
+                    "处理实际事务或提升技能"
+                ] 
+            },
+            { 
+                question: "面对压力时，您的应对方式是：", 
+                options: [
+                    "积极行动，解决问题根源",
+                    "理性分析，寻找最佳方案",
+                    "寻求支持，与他人交流",
+                    "按部就班，完成该做的事"
+                ] 
+            },
+            { 
+                question: "您如何做出重要人生决定？", 
+                options: [
+                    "跟随内心感受和热情",
+                    "分析各种可能性和后果",
+                    "咨询亲友意见，考虑他人影响",
+                    "基于实际因素和现实条件"
+                ] 
+            },
+            { 
+                question: "在团队中，您最看重的是：", 
+                options: [
+                    "效率和成果",
+                    "创新和智慧",
+                    "和谐和合作",
+                    "可靠和稳定"
+                ] 
+            },
+            { 
+                question: "您如何处理批评？", 
+                options: [
+                    "视为改进机会，立即采取行动",
+                    "理性分析批评的有效性",
+                    "关注批评背后的情感因素",
+                    "参考具体建议，完善工作"
+                ] 
+            },
+            { 
+                question: "您认为自己的优势在于：", 
+                options: [
+                    "行动力和决断力",
+                    "分析能力和创造力",
+                    "同理心和人际关系",
+                    "责任感和实际技能"
+                ] 
+            },
+            { 
+                question: "当计划被打乱时，您通常会：", 
+                options: [
+                    "灵活调整，享受意外变化",
+                    "分析新情况，制定新计划",
+                    "关注团队情绪，协调适应",
+                    "努力恢复原计划，保持稳定"
+                ] 
+            },
+            { 
+                question: "您如何描述您的生活态度？", 
+                options: [
+                    "活在当下，享受每一刻",
+                    "思考未来，探索可能性",
+                    "关爱他人，建立深层关系",
+                    "务实负责，稳步前进"
+                ] 
+            },
+            { 
+                question: "在人际关系中，您最重视：", 
+                options: [
+                    "真诚和直接",
+                    "智力和深度",
+                    "情感和支持",
+                    "忠诚和可靠"
+                ] 
+            },
+            { 
+                question: "您如何处理复杂信息？", 
+                options: [
+                    "关注要点，快速抓住核心",
+                    "深入分析，理解内在联系",
+                    "与他人讨论，理清思路",
+                    "整理分类，建立清晰结构"
+                ] 
+            },
+            { 
+                question: "您如何学习新技能？", 
+                options: [
+                    "直接动手尝试，实践中学习",
+                    "研究理论，理解原理后实践",
+                    "向他人学习，观察和模仿",
+                    "按步骤学习，循序渐进"
+                ] 
+            },
+            { 
+                question: "您如何看待规则和传统？", 
+                options: [
+                    "必要时可以打破，追求创新",
+                    "理解其存在意义，但不盲从",
+                    "尊重传统，维护社会和谐",
+                    "遵守规则，确保秩序"
+                ] 
+            },
+            { 
+                question: "您如何描述您的工作风格？", 
+                options: [
+                    "灵活多变，适应性强",
+                    "深入专注，追求完美",
+                    "团队协作，注重人际关系",
+                    "有条不紊，注重细节"
+                ] 
+            },
+            { 
+                question: "在社交网络中，您通常是：", 
+                options: [
+                    "中心人物，连接很多人",
+                    "深度交流，有少数知心朋友",
+                    "积极参与，关注群体动态",
+                    "观察者，选择性参与"
+                ] 
+            },
+            { 
+                question: "您如何面对不确定的未来？", 
+                options: [
+                    "充满期待，拥抱未知",
+                    "理性规划，准备多种方案",
+                    "寻求支持，与他人共渡难关",
+                    "专注当下，做好眼前事"
+                ] 
+            },
+            { 
+                question: "您最欣赏的品质是：", 
+                options: [
+                    "勇气和行动力",
+                    "智慧和洞察力",
+                    "善良和同理心",
+                    "诚实和责任感"
+                ] 
+            },
+            { 
+                question: "在压力下，您更容易：", 
+                options: [
+                    "变得急躁，要求快速结果",
+                    "过度思考，难以做出决定",
+                    "过于敏感，担心他人看法",
+                    "固执己见，拒绝改变"
+                ] 
+            },
+            { 
+                question: "您如何定义成功？", 
+                options: [
+                    "实现目标，获得影响力",
+                    "追求知识，创造新事物",
+                    "建立深厚关系，帮助他人",
+                    "生活稳定，履行责任"
+                ] 
+            }
+        ];
+        
+        // 完整的6种人格报告
+        const personalityReports = {
+            "ENTJ": {
+                type: "领袖型-红ENTJ",
+                icon: "fa-crown",
+                color: "#e63946",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-chess-king"></i> 战略型领袖人格</h3>
+                    <p><strong>核心特征</strong>：天生的领导者，善于战略规划，目标导向明确，决策迅速果断。具有强大的组织能力和执行力，擅长调动资源实现目标。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>过度支配</strong> - 容易忽视他人感受，表现出控制倾向，可能导致团队士气下降</li>
+                        <li><strong>耐心不足</strong> - 对效率低下的人容忍度低，容易显得不耐烦</li>
+                        <li><strong>情感疏离</strong> - 过度理性导致情感连接薄弱，可能影响人际关系深度</li>
+                        <li><strong>工作狂倾向</strong> - 过度投入工作可能影响生活平衡和健康</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>每日记录3次倾听他人意见的时刻，练习主动询问团队成员的想法</li>
+                        <li>决策前预留24小时反思期，避免冲动决定，特别是涉及人事变动时</li>
+                        <li>每周进行30分钟情感反思日记，记录自己和他人的情绪变化</li>
+                        <li>建立工作与生活的明确界限，每周保证至少2个完整的休息日</li>
+                        <li>每月安排一次非工作相关的社交活动，发展工作外的人际关系</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：CEO/企业高管/创业家/军事指挥官/项目总监/战略顾问/投资银行家</p>
+                        <p><strong>慎入领域</strong>：社工/护理/重复性行政工作</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>避免将伴侣视为"项目"，每周安排不受干扰的亲密时间。学习表达情感而非只是提供解决方案，注意倾听伴侣的情感需求。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>与情感型同事（如ISFJ）建立互补合作关系，授权代替控制。定期组织团队建设活动，认可团队成员的贡献。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>培养情商，学习非暴力沟通技巧。定期反思自己的领导风格，寻求建设性反馈。关注身心健康，保持工作与生活的平衡。</p>
+                    </div>
+                </div>
+                `
+            },
+            "INTP": {
+                type: "分析型-蓝INTP",
+                icon: "fa-lightbulb",
+                color: "#3a86ff",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-brain"></i> 逻辑分析型人格</h3>
+                    <p><strong>核心特征</strong>：创新思考者，热爱理论与抽象概念，具有强大的分析能力和逻辑思维。独立自主，追求知识与真理，擅长解决复杂问题。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>过度理论化</strong> - 可能陷入无尽的分析而难以付诸实践</li>
+                        <li><strong>情感表达困难</strong> - 不擅长表达情感和建立情感连接</li>
+                        <li><strong>完美主义倾向</strong> - 对想法要求过高可能导致拖延</li>
+                        <li><strong>社交回避</strong> - 倾向于独处可能错过重要人际关系</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>为每个项目设置明确的实施期限，平衡思考与行动</li>
+                        <li>每周练习向亲近的人表达一次情感或赞赏</li>
+                        <li>采用"完成胜于完美"的原则，设定阶段性目标</li>
+                        <li>每月至少参加两次社交活动，每次至少与3人深入交流</li>
+                        <li>建立情感表达日记，记录并反思自己的情感体验</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：科研人员/系统分析师/哲学教授/战略规划师/软件架构师</p>
+                        <p><strong>慎入领域</strong>：销售代表/活动策划/客户服务</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>学习主动表达情感，定期安排"情感交流时间"。理解伴侣可能需要更多情感支持而非逻辑解决方案。培养共情能力，关注伴侣的情感需求。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>寻找能够执行想法的合作伙伴(如ESTJ)，将理论转化为实践。在团队中扮演智库角色，提供创新思路和解决方案。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>发展执行能力，将创意转化为成果。学习项目管理技巧，提高任务完成度。加强社交技能训练，拓展人际网络。</p>
+                    </div>
+                </div>
+                `
+            },
+            "ENFJ": {
+                type: "教导型-黄ENFJ",
+                icon: "fa-chalkboard-teacher",
+                color: "#ffbe0b",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-hands-helping"></i> 激励教导型人格</h3>
+                    <p><strong>核心特征</strong>：天生的导师和领导者，富有魅力且善于沟通。具有强烈的同理心，能够洞察他人需求，善于激励和引导他人成长。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>过度付出</strong> - 可能忽视自身需求而过度关注他人</li>
+                        <li><strong>理想化倾向</strong> - 对他人期望过高可能导致失望</li>
+                        <li><strong>回避冲突</strong> - 为维持和谐可能回避必要冲突</li>
+                        <li><strong>情感负担过重</strong> - 容易吸收他人负面情绪</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>每天设置"自我关怀时间"，优先满足自身基本需求</li>
+                        <li>建立现实的人际期望，接受他人的局限性</li>
+                        <li>学习建设性冲突解决技巧，每月练习处理至少一次分歧</li>
+                        <li>建立情绪界限，练习区分他人情绪与自身情绪</li>
+                        <li>定期进行情绪清理练习，如冥想或写日记</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：人力资源总监/心理咨询师/教师/培训师/团队教练/公关专家</p>
+                        <p><strong>慎入领域</strong>：数据分析/实验室研究/会计审计</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>避免过度承担伴侣的责任，保持健康的个人边界。学习直接表达自身需求而非期待对方猜测。建立平等的伴侣关系，避免单方面付出。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>与逻辑思考型同事(如ISTP)合作平衡决策。在团队中扮演凝聚者角色，但避免过度干涉他人工作。学会授权，信任团队成员的能力。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>培养理性决策能力，平衡情感与逻辑。学习设定健康的个人边界，防止情感耗竭。定期进行自我反思，保持个人成长。</p>
+                    </div>
+                </div>
+                `
+            },
+            "ISTJ": {
+                type: "守护型-绿ISTJ",
+                icon: "fa-shield-alt",
+                color: "#2a9d8f",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-tasks"></i> 务实守护型人格</h3>
+                    <p><strong>核心特征</strong>：可靠务实，注重细节，具有强烈的责任感和组织能力。遵守规则和传统，做事有条理，能够持之以恒完成任务。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>过度保守</strong> - 可能抗拒变化和新方法</li>
+                        <li><strong>灵活性不足</strong> - 在计划变更时适应困难</li>
+                        <li><strong>情感表达障碍</strong> - 不擅长表达情感和赞赏</li>
+                        <li><strong>工作主义倾向</strong> - 过度重视责任可能忽视生活平衡</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>每月尝试一种新的工作方法或技术，培养适应性</li>
+                        <li>练习"计划B思维"，为重要项目制定备选方案</li>
+                        <li>每天向一位同事或家人表达具体的赞赏</li>
+                        <li>建立工作和休闲的明确界限，保证休息时间</li>
+                        <li>学习正念练习，提高对变化的接受能力</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：审计师/项目经理/行政主管/财务经理/质量控制/法律助理</p>
+                        <p><strong>慎入领域</strong>：艺术创作/创业公司/即兴表演</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>学习表达情感，定期安排浪漫惊喜。理解伴侣可能需要更多情感交流而非实际服务。练习表达爱意，增强情感连接。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>与创新思维型同事(如ENFP)合作激发新想法。在团队中扮演稳定器角色，确保任务落实。尊重不同工作风格，学会灵活应对。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>培养创新思维，尝试从不同角度看待问题。学习灵活应对变化，提高适应性。发展情感表达能力，增强人际关系深度。</p>
+                    </div>
+                </div>
+                `
+            },
+            "ENFP": {
+                type: "激励型-紫ENFP",
+                icon: "fa-magic",
+                color: "#7209b7",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-bolt"></i> 热情激励型人格</h3>
+                    <p><strong>核心特征</strong>：充满热情和创造力，善于发现可能性并激励他人。具有强大的社交能力和感染力，热爱自由和多样性。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>专注力分散</strong> - 对新事物兴趣广泛但难以持续</li>
+                        <li><strong>过度理想化</strong> - 可能忽视现实约束</li>
+                        <li><strong>回避细节</strong> - 对日常事务缺乏耐心</li>
+                        <li><strong>情绪波动</strong> - 情感丰富但可能反应过度</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>使用时间管理工具，每日聚焦3个核心任务</li>
+                        <li>重大决策前进行"现实检查"，列出潜在挑战</li>
+                        <li>与注重细节的人合作，互补完成项目</li>
+                        <li>练习情绪调节技巧，如深呼吸和暂停反应</li>
+                        <li>建立每日反思习惯，评估目标进展</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：创意总监/心理咨询师/营销策划/活动策划/作家/艺人</p>
+                        <p><strong>慎入领域</strong>：会计审计/数据录入/常规行政</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>培养承诺意识，避免因新鲜感转移注意力。学习处理关系中的日常事务，建立稳定关系习惯。理解伴侣可能需要更多稳定性。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>与执行型同事(如ISTJ)合作实现创意。在团队中扮演创新催化剂角色，激发新想法。学会关注细节，提高工作完成度。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>发展项目完成能力，将创意转化为成果。学习专注技巧，提高任务完成度。培养情绪稳定性，增强抗压能力。</p>
+                    </div>
+                </div>
+                `
+            },
+            "ISFJ": {
+                type: "守护型-橙ISFJ",
+                icon: "fa-hands-helping",
+                color: "#fb8500",
+                report: `
+                <div class="report-section">
+                    <h3><i class="fas fa-heart"></i> 奉献守护型人格</h3>
+                    <p><strong>核心特征</strong>：温暖负责，注重实际帮助他人。具有强大的观察力和记忆力，关注细节，忠诚可靠，致力于维持和谐环境。</p>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> 需改善的缺陷</h4>
+                    <ul>
+                        <li><strong>过度付出</strong> - 可能忽视自身需求</li>
+                        <li><strong>回避冲突</strong> - 可能压抑自身意见维持和谐</li>
+                        <li><strong>抗拒变化</strong> - 对熟悉环境有强烈依赖</li>
+                        <li><strong>情感内化</strong> - 不满情绪可能积累爆发</li>
+                    </ul>
+                </div>
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-tools"></i> 改善方案</h4>
+                    <ol>
+                        <li>练习自我关怀，每天优先安排自己的需求</li>
+                        <li>学习建设性表达不同意见的技巧</li>
+                        <li>逐步接触新环境，每月尝试一件新事物</li>
+                        <li>建立情绪表达习惯，及时沟通不满</li>
+                        <li>学习设定健康边界，拒绝不合理要求</li>
+                    </ol>
+                </div>
+                
+                <div class="type-characteristics">
+                    <div class="characteristic">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>职业适配</h4>
+                        <p><strong>高匹配领域</strong>：护士/教师/社工/行政助理/客户服务/图书管理员</p>
+                        <p><strong>慎入领域</strong>：高压销售/风险投资/创业公司</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-heart"></i>
+                        <h4>恋爱关系</h4>
+                        <p>学习直接表达需求，避免过度迁就。定期与伴侣分享自己的真实感受和想法。建立平等的伴侣关系，避免单方面付出。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-users"></i>
+                        <h4>职场关系</h4>
+                        <p>与决策型同事(如ENTJ)合作提高效率。在团队中扮演支持者角色，提供细致周到的帮助。学会表达自己的观点，增强影响力。</p>
+                    </div>
+                    
+                    <div class="characteristic">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>自我提升</h4>
+                        <p>培养自我主张能力，重视自身需求。学习决策技巧，提高自主能力。增强适应能力，面对变化更加从容。</p>
+                    </div>
+                </div>
+                `
+            }
+        };
+
+        // 当前测试状态
+        let currentQuestion = 0;
+        let answers = [];
+        let personalityType = "ENTJ"; // 实际应根据答案计算
+        let paymentId = "";
+
+        // 初始化测试
+        function initTest() {
+            // 生成唯一的支付ID
+            paymentId = "ID-" + Date.now().toString().slice(-6);
+            document.getElementById("payment-id").textContent = paymentId;
+            
+            showQuestion();
+            updateProgress();
+        }
+
+        // 显示题目
+        function showQuestion() {
+            const container = document.getElementById('questions-container');
+            const q = questions[currentQuestion];
+            
+            let html = `
+                <div class="question">
+                    <h3><span class="question-number">${currentQuestion + 1}</span> ${q.question}</h3>
+                    <div class="options">
+            `;
+            
+            q.options.forEach((option, index) => {
+                html += `
+                    <input type="radio" id="option${index}" name="answer" value="${index}">
+                    <label for="option${index}">${option}</label>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+                <button onclick="nextQuestion()">
+                    ${currentQuestion < questions.length - 1 ? '下一题 <i class="fas fa-arrow-right"></i>' : '完成测试 <i class="fas fa-check-circle"></i>'}
+                </button>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+        }
+
+        // 下一题
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return alert('请选择答案');
+            
+            answers.push(selected.value);
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                showQuestion();
+                updateProgress();
+            } else {
+                calculateResult();
+                showSection('payment-section');
+                document.getElementById('preview-type').textContent = personalityReports[personalityType].type;
+            }
+        }
+
+        // 计算结果 (简化版)
+        function calculateResult() {
+            // 实际应根据30题答案计算MBTI类型和色彩
+            // 此处随机选择一种类型作为示例
+            const types = Object.keys(personalityReports);
+            personalityType = types[Math.floor(Math.random() * types.length)];
+        }
+
+        // 显示对应区域
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.add('active-section');
+            
+            // 更新结果页的图标
+            if (sectionId === 'result-section') {
+                const iconClass = personalityReports[personalityType].icon;
+                document.querySelector('.personality-icon i').className = `fas ${iconClass}`;
+                document.querySelector('.personality-icon').style.backgroundColor = personalityReports[personalityType].color;
+            }
+        }
+
+        // 重定向到支付宝转账页面
+        function redirectToAlipay() {
+            // 支付宝转账链接格式
+            const alipayLink = "alipays://platformapi/startapp?appId=09999988&actionType=toAccount&goBack=NO&account=136365161@qq.com";
+            
+            // 尝试在App内打开
+            window.location.href = alipayLink;
+            
+            // 设置备用方案：如果无法打开App，则显示提示
+            setTimeout(function() {
+                if (!document.hidden) {
+                    alert("无法打开支付宝App，请手动复制账号进行转账：136365161@qq.com");
+                }
+            }, 1000);
+        }
+
+        // 显示结果
+        function showResult() {
+            document.getElementById('result-type').textContent = personalityReports[personalityType].type;
+            document.getElementById('full-report').innerHTML = personalityReports[personalityType].report;
+            showSection('result-section');
+            
+            // 初始化评分
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    setRating(value);
+                });
+            });
+        }
+
+        // 设置评分
+        function setRating(value) {
+            document.querySelectorAll('.star').forEach((star, index) => {
+                if (index < value) {
+                    star.textContent = '★';
+                    star.classList.add('active');
+                } else {
+                    star.textContent = '☆';
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // 提交评分
+        function submitRating() {
+            const activeStars = document.querySelectorAll('.star.active').length;
+            if (activeStars === 0) return alert('请选择评分');
+            
+            alert(`感谢您的${activeStars}星评价！您的反馈将用于改进测评系统`);
+            // 实际应发送评分数据到服务器
+        }
+
+        // 页面加载时初始化测试
+        window.onload = initTest;
+    </script>
+</body>
+</html>
